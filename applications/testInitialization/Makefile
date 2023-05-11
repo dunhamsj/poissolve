@@ -1,32 +1,26 @@
-VPATH_LOCATIONS += .
+VPATH_LOCATIONS += $(shell pwd)
 
 include $(POISSOLVE_ROOT)/build/Make.VPATH
-
-TARGET = testInitialization
-
-all: build $(TARGET)
 
 SRCDIR := src
 OBJDIR := obj
 
-build:
-	@echo ${VPATH}
-	@mkdir -p $(OBJDIR)
-	@mkdir -p $(SRCDIR)
-	@python3 $(POISSOLVE_ROOT)/build/buildDependencies.py
+$(shell mkdir -p $(OBJDIR))
+$(shell mkdir -p $(SRCDIR))
+$(shell python ${POISSOLVE_ROOT}/build/buildDependencies.py)
 
-ifneq ("$(wildcard $(OBJDIR)/objFiles)","")
-  OBJ := $(shell cat $(OBJDIR)/objFiles)
-endif
-ifneq ("$(wildcard $(SRCDIR)/srcFiles)","")
-  SRC = $(shell cat $(SRCDIR)/srcFiles)
-endif
+TARGET = testInitialization
+
+all: $(TARGET)
+
+OBJ := $(shell cat $(OBJDIR)/objFiles)
+SRC := $(shell cat $(SRCDIR)/srcFiles)
 
 $(TARGET): $(OBJDIR)/$(OBJ)
 	@echo "== LINKING EXECUTABLE $(TARGET)"
 	@$(FC) $(FFLAGS) $< -o $@
 
-$(OBJDIR)/%.o: $(SRC)
+$(OBJDIR)/$(OBJ): $(SRCDIR)/$(SRC)
 	@echo "COMPILING SOURCE $< INTO OBJECT $@"
 	$(FC) $(FFLAGS) -o $@ -c $<
 

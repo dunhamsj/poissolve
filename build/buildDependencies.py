@@ -4,12 +4,10 @@
 Build Makefile_Dependencies* files for source code
 """
 
-# TODO: Read in VPATH from environment
-
 import os
 
 POISSOLVE_ROOT = os.getenv( 'POISSOLVE_ROOT' )
-VPATH = os.getenv( 'VPATH' ).split( ' ' )
+VPATH          = os.getenv( 'VPATH' ).split( ' ' )
 
 def getDeps( file ):
     deps = []
@@ -39,15 +37,15 @@ for iPath in range( len( VPATH ) ):
             f90[files[iFile]] = deps
             srcFiles.append( files[iFile] )
 
+    os.chdir( owd )
+
     keys   = list( f90.keys() )
     values = list( f90.values() )
 
-    makefile = 'Makefile_Dependencies_{:}' \
+    makefile = 'src/Makefile_Dependencies_{:}' \
                .format( VPATH[iPath].split( '/' )[-1] )
 
     os.system( 'rm -f {:}'.format( makefile ) )
-
-    if makefile[-1] == '.': continue
 
     with open( makefile, 'w' ) as f:
         for i in range( len( keys ) ):
