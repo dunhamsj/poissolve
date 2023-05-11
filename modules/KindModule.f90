@@ -1,0 +1,8 @@
+MODULE KindModule
+
+  IMPLICIT NONE
+  PRIVATE
+
+  INTEGER, PUBLIC :: DP = KIND( 1.0d0 )
+
+END MODULE KindModule
