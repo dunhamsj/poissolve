@@ -1,10 +1,12 @@
 PROGRAM TestInitialization
 
+  USE KindModule, ONLY: &
+    DP
   USE InitializationModule, ONLY: &
     InitializePoissolve
-  USE driverModule, ONLY: &
 
   IMPLICIT NONE
-  PRIVATE
+
+  REAL(DP) :: x
 
 END PROGRAM TestInitialization

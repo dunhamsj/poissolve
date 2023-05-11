@@ -4,12 +4,12 @@
 Build Makefile_Dependencies* files for source code
 """
 
-# TODO: Read in POISSOLVE_ROOT and VPATH from environment
+# TODO: Read in VPATH from environment
 
 import os
 
-POISSOLVE_ROOT = '/home/kkadoogan/Work/Codes/poissolve/'
-VPATH = [ POISSOLVE_ROOT + 'modules' ]
+POISSOLVE_ROOT = os.getenv( 'POISSOLVE_ROOT' )
+VPATH = os.getenv( 'VPATH' ).split( ' ' )
 
 def getDeps( file ):
     deps = []
@@ -20,6 +20,9 @@ def getDeps( file ):
     return deps
 
 owd = os.getcwd()
+
+objFiles = []
+srcFiles = []
 
 for iPath in range( len( VPATH ) ):
 
@@ -34,6 +37,7 @@ for iPath in range( len( VPATH ) ):
         if files[iFile][-3:] == 'f90':
             deps = getDeps( nwd + '/' + files[iFile] )
             f90[files[iFile]] = deps
+            srcFiles.append( files[iFile] )
 
     keys   = list( f90.keys() )
     values = list( f90.values() )
@@ -41,14 +45,31 @@ for iPath in range( len( VPATH ) ):
     makefile = 'Makefile_Dependencies_{:}' \
                .format( VPATH[iPath].split( '/' )[-1] )
 
-    os.system( 'rm -f Makefile_Dependencies_{:}'.format( makefile ) )
+    os.system( 'rm -f {:}'.format( makefile ) )
+
+    if makefile[-1] == '.': continue
 
     with open( makefile, 'w' ) as f:
         for i in range( len( keys ) ):
-            f.write( '{:}.o: \\\n'.format( keys[0][:-4] ) )
+            f.write( '{:}.o: \\\n'.format( keys[i][:-4] ) )
             if len( values[i] ) > 0:
                 for j in range( len( values[i] ) ):
-                    f.write( '  {:} \\\n'.format( values[i][j] ) )
-            f.write( '  {:}\n'.format( keys[i] ) )
+                    f.write( '\t{:} \\\n'.format( values[i][j] ) )
+            f.write( '\t{:}\n'.format( keys[i] ) )
             if not i == len( keys ) - 1:
                 f.write( '\n' )
+
+    for i in range( len( keys ) ):
+        os.system( 'cp {:} {:}/src/{:}'.format( keys[i], owd, keys[i] ) )
+        objFiles.append( '{:}.o'.format( keys[i][:-4] ) )
+        if len( values[i] ) > 0:
+            objFiles.append( values[i][j] )
+
+unique = []
+[ unique.append(x) for x in objFiles if x not in unique ]
+with open( owd + '/obj/objFiles', 'w' ) as f:
+    for i in range( len( unique ) ):
+        f.write( unique[i] + '\n' )
+with open( owd + '/src/srcFiles', 'w' ) as f:
+    for i in range( len( srcFiles ) ):
+        f.write( srcFiles[i] + '\n' )

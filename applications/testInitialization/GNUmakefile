@@ -1,1 +1,0 @@
-$$(info $POISSOLVE_ROOT)

@@ -15,6 +15,8 @@ elif [[ ${POISSOLVE_MACHINE} == kkadoogan ]]; then
     echo "  INFO: Setting poissolve environment for" ${POISSOLVE_MACHINE}
     echo ""
     export POISSOLVE_ROOT=/home/kkadoogan/Work/Codes/poissolve
+    export CC=mpicc
+    export FC=mpif90
 
 else
 
