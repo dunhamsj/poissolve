@@ -2,8 +2,8 @@ VPATH_LOCATIONS += $(shell pwd)
 
 include $(POISSOLVE_ROOT)/build/Make.VPATH
 
-SRCDIR := src
-OBJDIR := obj
+SRCDIR := $(shell pwd)/src
+OBJDIR := $(shell pwd)/obj
 
 $(shell mkdir -p $(OBJDIR))
 $(shell mkdir -p $(SRCDIR))
