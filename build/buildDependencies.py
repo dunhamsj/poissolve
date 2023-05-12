@@ -8,6 +8,9 @@ import os
 
 POISSOLVE_ROOT = os.getenv( 'POISSOLVE_ROOT' )
 VPATH          = os.getenv( 'VPATH' ).split( ' ' )
+#VPATH = [ '/Users/dunhamsj/Work/Codes/poissolve/applications/testInitialization', \
+#          '/Users/dunhamsj/Work/Codes/poissolve/modules/Initialization', \
+#          '/Users/dunhamsj/Work/Codes/poissolve/modules/Library' ]
 
 def getDeps( file ):
     deps = []
@@ -18,56 +21,84 @@ def getDeps( file ):
     return deps
 
 owd = os.getcwd()
+#owd = POISSOLVE_ROOT + '/applications/testInitialization'
 
 objFiles = []
 srcFiles = []
 
+f90 = {}
 for iPath in range( len( VPATH ) ):
 
     nwd = VPATH[iPath]
 
-    os.chdir( nwd )
-
     files = os.listdir( nwd )
 
-    f90 = {}
     for iFile in range( len( files ) ):
         if files[iFile][-3:] == 'f90':
             deps = getDeps( nwd + '/' + files[iFile] )
             f90[files[iFile]] = deps
             srcFiles.append( files[iFile] )
 
-    os.chdir( owd )
+keys   = list( f90.keys() )
+values = list( f90.values() )
 
-    keys   = list( f90.keys() )
-    values = list( f90.values() )
+for iPath in range( len( VPATH ) ):
 
-    makefile = 'src/Makefile_Dependencies_{:}' \
-               .format( VPATH[iPath].split( '/' )[-1] )
+    nwd = VPATH[iPath]
 
-    os.system( 'rm -f {:}'.format( makefile ) )
+    for iKey in range( len( keys ) ):
+        oldSrc = '{:}/{:}'.format( nwd, keys[iKey] )
+        if not os.path.isfile( oldSrc ): continue
+        newSrc = '{:}/src/{:}'.format( owd, keys[iKey] )
+        os.system( 'cp {:} {:}'.format( oldSrc, newSrc ) )
+        objFiles.append( '{:}.o'.format( keys[iKey][:-4] ) )
+        if len( values[iKey] ) > 0:
+            for iValue in range( len( values[iKey] ) ):
+                objFiles.append( values[iKey][iValue] )
 
-    with open( makefile, 'w' ) as f:
-        for i in range( len( keys ) ):
-            f.write( '{:}.o: \\\n'.format( keys[i][:-4] ) )
-            if len( values[i] ) > 0:
-                for j in range( len( values[i] ) ):
-                    f.write( '\t{:} \\\n'.format( values[i][j] ) )
-            f.write( '\t{:}\n'.format( keys[i] ) )
-            if not i == len( keys ) - 1:
-                f.write( '\n' )
+# Sort dictionary by dependencies
 
-    for i in range( len( keys ) ):
-        os.system( 'cp {:} {:}/src/{:}'.format( keys[i], owd, keys[i] ) )
-        objFiles.append( '{:}.o'.format( keys[i][:-4] ) )
-        if len( values[i] ) > 0:
-            objFiles.append( values[i][j] )
+ind = [ i for i in range( len( keys ) ) ]
 
-unique = []
-[ unique.append(x) for x in objFiles if x not in unique ]
+for iKey in range( len( keys ) ):
+
+    for jKey in range( len( keys ) ):
+
+        if iKey == jKey: continue
+
+        for iValue in range( len( values[iKey] ) ):
+            if values[iKey][iValue][:-2] == keys[jKey][:-4]:
+                a, b = ind.index(iKey), ind.index(jKey)
+                ind[b], ind[a] = ind[a], ind[b]
+                break
+
+f90 = {}
+for iKey in range( len( keys ) ):
+    f90[keys[ind[iKey]]] = values[ind[iKey]]
+keys   = list( f90.keys() )
+values = list( f90.values() )
+
+rules = owd + '/obj/Make.rules'
+
+os.system( 'rm -f {:}'.format( rules ) )
+
+with open( rules, 'w' ) as f:
+    for iKey in range( len( keys ) ):
+        if len( values[iKey] ) > 0:
+            f.write( '$(OBJDIR)/{:}.o: $(SRCDIR)/{:} $(SRCDIR)/{:}\n' \
+                     .format( keys[iKey][:-4], keys[iKey], \
+                              ' $(SRCDIR)/'.join( [ v.replace('.o','.f90') \
+                                              for v in values[iKey] ] ) ) )
+        else:
+            f.write( '$(OBJDIR)/{:}.o: $(SRCDIR)/{:}\n' \
+                     .format( keys[iKey][:-4], keys[iKey] ) )
+        f.write( '\t@echo\n' )
+        f.write( '\t@echo "COMPILING SOURCE $< INTO OBJECT $@"\n' )
+        f.write( '\t$(FC) $(FFLAGS) -o $@ -c $<\n\n' )
+
 with open( owd + '/obj/objFiles', 'w' ) as f:
-    for i in range( len( unique ) ):
-        f.write( unique[i] + '\n' )
+    for iKey in range( len( keys ) ):
+        f.write( keys[iKey].replace( '.f90','.o' ) + '\n' )
 with open( owd + '/src/srcFiles', 'w' ) as f:
-    for i in range( len( srcFiles ) ):
-        f.write( srcFiles[i] + '\n' )
+    for iKey in range( len( keys ) ):
+        f.write( keys[iKey] + '\n' )
