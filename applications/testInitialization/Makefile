@@ -20,10 +20,7 @@ TARGET_DEPS = $(patsubst %, $(OBJDIR)/%, $(OBJ))
 
 all: $(TARGET_DEPS) $(TARGET)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.f90
-	@echo
-	@echo "COMPILING SOURCE $< INTO OBJECT $@"
-	$(FC) $(FFLAGS) -o $@ -c $<
+include $(POISSOLVE_ROOT)/build/Make.rules
 
 $(TARGET): $(TARGET_DEPS)
 	@echo
