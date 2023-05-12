@@ -20,7 +20,10 @@ TARGET_DEPS = $(patsubst %, $(OBJDIR)/%, $(OBJ))
 
 all: $(TARGET_DEPS) $(TARGET)
 
-include $(OBJDIR)/Make.rules
+$(OBJDIR)/%.o: $(SRCDIR)/%.f90
+	@echo
+	@echo "COMPILING SOURCE $< INTO OBJECT $@"
+	$(FC) $(FFLAGS) -o $@ -c $<
 
 $(TARGET): $(TARGET_DEPS)
 	@echo

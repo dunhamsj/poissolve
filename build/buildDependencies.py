@@ -83,19 +83,19 @@ rules = owd + '/obj/Make.rules'
 
 os.system( 'rm -f {:}'.format( rules ) )
 
-with open( rules, 'w' ) as f:
-    for iKey in range( len( keys ) ):
-        if len( values[iKey] ) > 0:
-            f.write( '$(OBJDIR)/{:}.o: $(SRCDIR)/{:} $(SRCDIR)/{:}\n' \
-                     .format( keys[iKey][:-4], keys[iKey], \
-                              ' $(SRCDIR)/'.join( [ v.replace('.o','.f90') \
-                                              for v in values[iKey] ] ) ) )
-        else:
-            f.write( '$(OBJDIR)/{:}.o: $(SRCDIR)/{:}\n' \
-                     .format( keys[iKey][:-4], keys[iKey] ) )
-        f.write( '\t@echo\n' )
-        f.write( '\t@echo "COMPILING SOURCE $< INTO OBJECT $@"\n' )
-        f.write( '\t$(FC) $(FFLAGS) -o $@ -c $<\n\n' )
+#with open( rules, 'w' ) as f:
+#    for iKey in range( len( keys ) ):
+#        if len( values[iKey] ) > 0:
+#            f.write( '$(OBJDIR)/{:}.o: $(SRCDIR)/{:} $(SRCDIR)/{:}\n' \
+#                     .format( keys[iKey][:-4], keys[iKey], \
+#                              ' $(SRCDIR)/'.join( [ v.replace('.o','.f90') \
+#                                              for v in values[iKey] ] ) ) )
+#        else:
+#            f.write( '$(OBJDIR)/{:}.o: $(SRCDIR)/{:}\n' \
+#                     .format( keys[iKey][:-4], keys[iKey] ) )
+#        f.write( '\t@echo\n' )
+#        f.write( '\t@echo "COMPILING SOURCE $< INTO OBJECT $@"\n' )
+#        f.write( '\t$(FC) $(FFLAGS) -o $@ -c $<\n\n' )
 
 with open( owd + '/obj/objFiles', 'w' ) as f:
     for iKey in range( len( keys ) ):
