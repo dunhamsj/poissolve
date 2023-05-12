@@ -18,7 +18,7 @@ all: $(TARGET)
 
 include $(POISSOLVE_ROOT)/build/Makefile_Poissolve_ObjectFiles
 include $(POISSOLVE_ROOT)/build/Makefile_Poissolve_Dependencies
-include $(POISSOLVE_ROOT)/build/Make.rules
+include $(POISSOLVE_ROOT)/build/Makefile_rules
 
 $(TARGET): $(POISSOLVE_OBJ)
 	@echo
