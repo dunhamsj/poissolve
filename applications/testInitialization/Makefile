@@ -14,18 +14,16 @@ SRC := $(shell cat $(SRCDIR)/srcFiles)
 
 TARGET = testInitialization
 
-VPATH = . $(SRCDIR)
+all: $(TARGET)
 
-TARGET_DEPS = $(patsubst %, $(OBJDIR)/%, $(OBJ))
-
-all: $(TARGET_DEPS) $(TARGET)
-
+include $(POISSOLVE_ROOT)/build/Makefile_Poissolve_ObjectFiles
+include $(POISSOLVE_ROOT)/build/Makefile_Poissolve_Dependencies
 include $(POISSOLVE_ROOT)/build/Make.rules
 
-$(TARGET): $(TARGET_DEPS)
+$(TARGET): $(POISSOLVE_OBJ)
 	@echo
 	@echo "== LINKING EXECUTABLE $(TARGET)"
-	$(FC) $(FFLAGS) $< -o $@.ex $(TARGET_DEPS)
+	$(FC) $(FFLAGS) $< -o $@.ex $(POISSOLVE_OBJ)
 	@echo
 
 clean:

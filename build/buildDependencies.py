@@ -124,13 +124,15 @@ with open( POISSOLVE_ROOT \
 
         if iKey < len( keys ) - 1:
 
-            f.write( '  {:} \\\n' \
-                     .format( keys[iKey].replace( '.f90', '.o' ) ) )
+            f.write( '  {:}{:} \\\n' \
+                     .format( owd + '/obj/', \
+                              keys[iKey].replace( '.f90', '.o' ) ) )
 
         else:
 
-            f.write( '  {:} \n' \
-                     .format( keys[iKey].replace( '.f90', '.o' ) ) )
+            f.write( '  {:}{:} \n' \
+                     .format( owd + '/obj/', \
+                              keys[iKey].replace( '.f90', '.o' ) ) )
 
 # Generate Makefile_Poissolve_Dependencies
 
