@@ -123,9 +123,12 @@ with open( POISSOLVE_ROOT \
     for iKey in range( len( keys ) ):
 
         if iKey < len( keys ) - 1:
+
             f.write( '  {:} \\\n' \
                      .format( keys[iKey].replace( '.f90', '.o' ) ) )
+
         else:
+
             f.write( '  {:} \n' \
                      .format( keys[iKey].replace( '.f90', '.o' ) ) )
 
