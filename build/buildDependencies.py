@@ -17,7 +17,8 @@ def getDeps( file ):
     with open( file, 'r' ) as f2:
         for line in f2:
             if 'IMPLICIT NONE' in line: break
-            if '  USE' in line: deps.append( line[6:].split( ',' )[0] + '.o' )
+            if '  USE ' in line:
+                deps.append( line[6:].split( ',' )[0] + '.o' )
     return deps
 
 owd = os.getcwd()

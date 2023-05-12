@@ -10,7 +10,7 @@ rm -f ${DEPFILE}
 for file in *90
   do
     echo "${file}.o: " | sed 's/$/\\/' >> ${DEPFILE}
-    cat ${file} | grep --colour=never ^"  USE" \
+    cat ${file} | grep --colour=never ^"  USE " \
       | cut -c 7- | cut -d, -f1 > dependenciesList
     while read p
       do echo "  $p.o " | sed 's/$/\\/' >> ${DEPFILE}
