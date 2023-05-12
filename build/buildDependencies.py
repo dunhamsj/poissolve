@@ -113,6 +113,38 @@ for iKey in range( len( keys ) ):
 keys   = list( f90.keys() )
 values = list( f90.values() )
 
+# Generate Makefile_Poissolve_ObjectFiles
+
+with open( POISSOLVE_ROOT \
+             + '/build/Makefile_Poissolve_ObjectFiles', 'w' ) as f:
+
+    f.write( 'POISSOLVE_OBJ = \\\n' )
+
+    for iKey in range( len( keys ) ):
+
+        if iKey < len( keys ) - 1:
+            f.write( '  {:} \\\n' \
+                     .format( keys[iKey].replace( '.f90', '.o' ) ) )
+        else:
+            f.write( '  {:} \n' \
+                     .format( keys[iKey].replace( '.f90', '.o' ) ) )
+
+# Generate Makefile_Poissolve_Dependencies
+
+with open( POISSOLVE_ROOT \
+             + '/build/Makefile_Poissolve_Dependencies', 'w' ) as f:
+    for iKey in range( len( keys ) ):
+
+        f.write( '{:}: \\\n'.format( keys[iKey].replace( '.f90', '.o' ) ) )
+
+        for iValue in range( len( values[iKey] ) ):
+
+            f.write( '  {:} \\\n'.format( values[iKey][iValue] ) )
+
+        f.write( '  {:}\n'.format( keys[iKey] ) )
+
+        if iKey < len( keys ) - 1: f.write( '\n' )
+
 # Create list of object files and source files
 
 with open( owd + '/obj/objFiles', 'w' ) as f:
