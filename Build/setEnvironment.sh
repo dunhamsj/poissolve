@@ -9,7 +9,15 @@ if   [[ ${POISSOLVE_MACHINE} == dunhamsj ]]; then
     echo ""
     export CC=mpicc
     export FC=mpif90
-    export FFLAGS=-g
+    export FFLAGS="-g \
+-O0 \
+-fcheck=bounds \
+-fbacktrace \
+-Wuninitialized \
+-Wunused \
+-ffpe-trap=invalid,zero,overflow,underflow \
+-ffpe-summary=invalid,zero,overflow,underflow \
+-fallow-argument-mismatch -finit-real=snan -ftrapv"
 
 elif [[ ${POISSOLVE_MACHINE} == kkadoogan ]]; then
 
@@ -18,7 +26,15 @@ elif [[ ${POISSOLVE_MACHINE} == kkadoogan ]]; then
     echo ""
     export CC=mpicc
     export FC=mpif90
-    export FFLAGS=-g -Wuninitialized
+    export FFLAGS="-g \
+-O0 \
+-fcheck=bounds \
+-fbacktrace \
+-Wuninitialized \
+-Wunused \
+-ffpe-trap=invalid,zero,overflow,underflow \
+-ffpe-summary=invalid,zero,overflow,underflow \
+-fallow-argument-mismatch -finit-real=snan -ftrapv"
 
 else
 
