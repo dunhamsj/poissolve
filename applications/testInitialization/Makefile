@@ -1,33 +1,33 @@
-VPATH_LOCATIONS += $(shell pwd)
+POISSOLVE_ROOT ?= ../..
+BD = $(shell pwd)
+export BLDDIR=$(BD)
 
-include $(POISSOLVE_ROOT)/build/Make.VPATH
+include $(POISSOLVE_ROOT)/build/Makefile_Build
 
-SRCDIR := $(shell pwd)/src
-OBJDIR := $(shell pwd)/obj
-
-$(shell mkdir -p $(OBJDIR))
-$(shell mkdir -p $(SRCDIR))
-$(shell python3 $(POISSOLVE_ROOT)/build/buildDependencies.py)
-
-OBJ := $(shell cat $(OBJDIR)/objFiles)
-SRC := $(shell cat $(SRCDIR)/srcFiles)
+.DEFAULT_GOAL := all
 
 TARGET = testInitialization
-
 all: $(TARGET)
 
-include $(POISSOLVE_ROOT)/build/Makefile_Poissolve_ObjectFiles
-include $(POISSOLVE_ROOT)/build/Makefile_Poissolve_Dependencies
-include $(POISSOLVE_ROOT)/build/Makefile_rules
-
-$(TARGET): $(POISSOLVE_OBJ)
-	@echo
-	@echo "== LINKING EXECUTABLE $(TARGET)"
-	$(FC) $(FFLAGS) $< -o $@.ex $(POISSOLVE_OBJ)
-	@echo
+$(TARGET): \
+	$(POISSOLVE_OBJ) \
+	$(TARGET).o
+	$(FC) $(FFLAGS) -J $(OBJDIR) -o $@.ex \
+	$(POISSOLVE_OBJ) \
+	$(TARGET).o
 
 clean:
-	rm -rf $(SRCDIR)
-	rm -rf $(OBJDIR)
+	rm -rf src
+	rm -rf obj
+	rm -rf *o
 	rm -rf *mod
 	rm -rf *ex
+	rm -rf tmp_build_dir
+	rm -rf Makefile_Driver
+
+#-include $(BD)/Makefile_driver
+
+testInitialization.o: \
+  KindModule.o \
+  InitializationModule.o \
+  testInitialization.f90

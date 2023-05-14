@@ -1,0 +1,16 @@
+SRCDIR := $(BLDDIR)/src
+OBJDIR := $(BLDDIR)/obj
+$(shell mkdir -p $(SRCDIR))
+$(shell mkdir -p $(OBJDIR))
+
+include $(POISSOLVE_ROOT)/build/Make.VPATH
+VPATH2_LOCATIONS += $(BLDDIR)
+export VPATH2 := $(VPATH2_LOCATIONS)
+
+$(shell python3 $(POISSOLVE_ROOT)/build/buildDependencies.py)
+include $(POISSOLVE_ROOT)/build/Makefile_Poissolve_ObjectFiles
+
+.SUFFIXES: .f90
+.f90.o:
+	$(FC) -c $< $(FFLAGS) -o $@
+include $(POISSOLVE_ROOT)/build/Makefile_Poissolve_Dependencies
