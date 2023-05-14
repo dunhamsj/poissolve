@@ -1,0 +1,4 @@
+VPATH_LOCATIONS += \
+  $(POISSOLVE_ROOT)/Modules/Library \
+  $(POISSOLVE_ROOT)/Modules/Initialization
+export VPATH=$(VPATH_LOCATIONS)

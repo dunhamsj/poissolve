@@ -3,7 +3,7 @@ OBJDIR := $(BLDDIR)/obj
 $(shell mkdir -p $(SRCDIR))
 $(shell mkdir -p $(OBJDIR))
 
-include $(POISSOLVE_ROOT)/Build/Make.VPATH
+include $(POISSOLVE_ROOT)/Build/Makefile_Path
 VPATH2_LOCATIONS += $(BLDDIR)
 export VPATH2 := $(VPATH2_LOCATIONS)
 
