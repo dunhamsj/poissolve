@@ -18,7 +18,7 @@ elif [[ ${POISSOLVE_MACHINE} == kkadoogan ]]; then
     echo ""
     export CC=mpicc
     export FC=mpif90
-    export FFLAGS=-g
+    export FFLAGS=-g -Wuninitialized
 
 else
 
