@@ -1,5 +1,7 @@
 POISSOLVE_ROOT ?= ../..
-BD = $(shell pwd)
+
+BDD = $(shell pwd)
+BD = $(BDD)/tmp_build_dir
 export BLDDIR=$(BD)
 
 include $(POISSOLVE_ROOT)/Build/Makefile_Build
@@ -10,11 +12,11 @@ TARGET = TestInitialization
 all: $(TARGET)
 
 $(TARGET): \
-	$(POISSOLVE_OBJ) \
-	$(TARGET).o
+	$(POISSOLV_OBJ_ABS) \
+	$(OBJDIR)/$(TARGET).o
 	$(FC) $(FFLAGS) -o $@.ex \
-	$(POISSOLVE_OBJ) \
-	$(TARGET).o
+	$(POISSOLVE_OBJ_ABS) \
+	$(OBJDIR)/$(TARGET).o
 
 clean:
 	rm -rf src
@@ -27,7 +29,7 @@ clean:
 
 #-include $(BD)/Makefile_driver
 
-TestInitialization.o: \
-  KindModule.o \
-  InitializationModule.o \
+$(OBJDIR)/TestInitialization.o: \
+  $(OBJDIR)/KindModule.o \
+  $(OBJDIR)/InitializationModule.o \
   TestInitialization.f90
