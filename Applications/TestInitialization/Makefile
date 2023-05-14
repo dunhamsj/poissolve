@@ -12,12 +12,12 @@ TARGET = TestInitialization
 all: $(TARGET)
 
 $(TARGET): \
-	$(POISSOLV_OBJ_ABS) \
+	$(POISSOLV_OBJ) \
 	$(OBJDIR)/$(TARGET).o
 	@echo
 	@echo "LINKING $@"
 	$(FC) $(FFLAGS) -o $@.ex \
-	$(POISSOLVE_OBJ_ABS) \
+	$(POISSOLVE_OBJ) \
 	$(OBJDIR)/$(TARGET).o
 	@echo
 	@echo "Executable $(TARGET).ex created successfully!"

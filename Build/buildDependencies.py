@@ -135,12 +135,12 @@ def WriteMakefile_ObjectFiles( deps, objDir ):
 
             if iSrc < len( srcs ) - 1:
 
-                f.write( '  {:} \\\n' \
-                         .format( srcs[iSrc].replace( '.f90', '.o' ) ) )
+                f.write( '  {:}{:} \\\n' \
+                         .format( objDir, srcs[iSrc].replace( '.f90', '.o' ) ) )
             else:
 
-                f.write( '  {:}\n' \
-                         .format( srcs[iSrc].replace( '.f90', '.o' ) ) )
+                f.write( '  {:}{:}\n' \
+                         .format( objDir, srcs[iSrc].replace( '.f90', '.o' ) ) )
 
 def WriteMakefile_Dependencies( deps, objDir ):
 

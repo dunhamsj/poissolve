@@ -12,7 +12,6 @@ export VPATH2 := $(VPATH2_LOCATIONS)
 
 $(shell python3 $(POISSOLVE_ROOT)/Build/buildDependencies.py)
 include $(OBJDIR)/Makefile_Poissolve_ObjectFiles
-POISSOLVE_OBJ_ABS := $(addprefix $(OBJDIR)/,$(POISSOLVE_OBJ))
 
 #.SUFFIXES: .f90
 .SUFFIXES:
