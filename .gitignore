@@ -1,8 +1,4 @@
 *.DS_Store
-Build/Makefile_Poissolve_Dependencies
-Build/Makefile_Poissolve_ObjectFiles
-*obj/
-*src/
-*.mod
 *.ex
+*tmp_build_dir/
 

@@ -19,15 +19,8 @@ $(TARGET): \
 	$(OBJDIR)/$(TARGET).o
 
 clean:
-	rm -rf src
-	rm -rf obj
-	rm -rf *o
-	rm -rf *mod
-	rm -rf *ex
-	rm -rf tmp_build_dir
-	rm -rf Makefile_Driver
-
-#-include $(BD)/Makefile_driver
+	rm -f *ex
+	rm -rf tmp_build_dir/
 
 $(OBJDIR)/TestInitialization.o: \
   $(OBJDIR)/KindModule.o \

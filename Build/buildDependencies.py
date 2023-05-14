@@ -121,9 +121,11 @@ def copyFiles( deps, VPATH, nwd, suffix ):
 
     return
 
-def WriteMakefile_ObjectFiles( deps, fileName ):
+def WriteMakefile_ObjectFiles( deps, objDir ):
 
     srcs = list( deps.keys() )
+
+    fileName = objDir + 'Makefile_Poissolve_ObjectFiles'
 
     with open( fileName, 'w' ) as f:
 
@@ -140,10 +142,12 @@ def WriteMakefile_ObjectFiles( deps, fileName ):
                 f.write( '  {:}\n' \
                          .format( srcs[iSrc].replace( '.f90', '.o' ) ) )
 
-def WriteMakefile_Dependencies( deps, fileName, objDir = '' ):
+def WriteMakefile_Dependencies( deps, objDir ):
 
     srcs = list( deps.keys  () )
     objs = list( deps.values() )
+
+    fileName = objDir + 'Makefile_Poissolve_Dependencies'
 
     with open( fileName, 'w' ) as f:
 
@@ -175,14 +179,9 @@ deps_f90 = makeDictionary( VPATH, 'f90' )
 
 copyFiles( deps_f90, VPATH, nwd, 'f90' )
 WriteMakefile_ObjectFiles \
-  ( deps_f90, \
-    '{:}/Build/Makefile_Poissolve_ObjectFiles'.format( POISSOLVE_ROOT ) )
-    #'{:}/../../Build/Makefile_Poissolve_ObjectFiles'.format( BLDDIR ) )
+  ( deps_f90, '{:}/obj/'.format( BLDDIR) )
 WriteMakefile_Dependencies \
-  ( deps_f90, \
-    '{:}/Build/Makefile_Poissolve_Dependencies'.format( POISSOLVE_ROOT ), \
-    objDir = '{:}/obj/'.format( BLDDIR) )
-    #'{:}/../../Build/Makefile_Poissolve_Dependencies'.format( BLDDIR ) )
+  ( deps_f90, '{:}/obj/'.format( BLDDIR) )
 
 #deps_f902 = makeDictionary( VPATH2, 'f90' )
 #

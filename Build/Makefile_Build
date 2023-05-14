@@ -11,7 +11,7 @@ VPATH2_LOCATIONS += $(BLDDIR)
 export VPATH2 := $(VPATH2_LOCATIONS)
 
 $(shell python3 $(POISSOLVE_ROOT)/Build/buildDependencies.py)
-include $(POISSOLVE_ROOT)/Build/Makefile_Poissolve_ObjectFiles
+include $(OBJDIR)/Makefile_Poissolve_ObjectFiles
 POISSOLVE_OBJ_ABS := $(addprefix $(OBJDIR)/,$(POISSOLVE_OBJ))
 
 #.SUFFIXES: .f90
@@ -19,4 +19,4 @@ POISSOLVE_OBJ_ABS := $(addprefix $(OBJDIR)/,$(POISSOLVE_OBJ))
 #.f90.o:
 $(OBJDIR)/%.o: %.f90
 	$(FC) $(FFLAGS) -c $< -o $@
-include $(POISSOLVE_ROOT)/Build/Makefile_Poissolve_Dependencies
+include $(OBJDIR)/Makefile_Poissolve_Dependencies
