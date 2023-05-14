@@ -2,17 +2,17 @@ POISSOLVE_ROOT ?= ../..
 BD = $(shell pwd)
 export BLDDIR=$(BD)
 
-include $(POISSOLVE_ROOT)/build/Makefile_Build
+include $(POISSOLVE_ROOT)/Build/Makefile_Build
 
 .DEFAULT_GOAL := all
 
-TARGET = testInitialization
+TARGET = TestInitialization
 all: $(TARGET)
 
 $(TARGET): \
 	$(POISSOLVE_OBJ) \
 	$(TARGET).o
-	$(FC) $(FFLAGS) -J $(OBJDIR) -o $@.ex \
+	$(FC) $(FFLAGS) -o $@.ex \
 	$(POISSOLVE_OBJ) \
 	$(TARGET).o
 
@@ -27,7 +27,7 @@ clean:
 
 #-include $(BD)/Makefile_driver
 
-testInitialization.o: \
+TestInitialization.o: \
   KindModule.o \
   InitializationModule.o \
-  testInitialization.f90
+  TestInitialization.f90

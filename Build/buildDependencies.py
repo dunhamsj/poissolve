@@ -164,9 +164,9 @@ POISSOLVE_ROOT = os.getenv( 'POISSOLVE_ROOT' )
 VPATH  = os.getenv( 'VPATH' ).split( ' ' )
 VPATH2 = os.getenv( 'VPATH2' ).split( ' ' )
 BLDDIR     = os.getenv( 'BLDDIR' )
-#VPATH = [ '/home/kkadoogan/Work/Codes/poissolve/modules/Initialization', \
-#          '/home/kkadoogan/Work/Codes/poissolve/modules/Library', \
-#          '/home/kkadoogan/Work/Codes/poissolve/applications/testInitialization' ]
+#VPATH = [ '/home/kkadoogan/Work/Codes/poissolve/Modules/Initialization', \
+#          '/home/kkadoogan/Work/Codes/poissolve/Modules/Library', \
+#          '/home/kkadoogan/Work/Codes/poissolve/Applications/TestInitialization' ]
 
 nwd = BLDDIR + '/src'
 
@@ -175,12 +175,12 @@ deps_f90 = makeDictionary( VPATH, 'f90' )
 copyFiles( deps_f90, VPATH, nwd, 'f90' )
 WriteMakefile_ObjectFiles \
   ( deps_f90, \
-    '{:}/build/Makefile_Poissolve_ObjectFiles'.format( POISSOLVE_ROOT ) )
-    #'{:}/../../build/Makefile_Poissolve_ObjectFiles'.format( BLDDIR ) )
+    '{:}/Build/Makefile_Poissolve_ObjectFiles'.format( POISSOLVE_ROOT ) )
+    #'{:}/../../Build/Makefile_Poissolve_ObjectFiles'.format( BLDDIR ) )
 WriteMakefile_Dependencies \
   ( deps_f90, \
-    '{:}/build/Makefile_Poissolve_Dependencies'.format( POISSOLVE_ROOT ) )
-    #'{:}/../../build/Makefile_Poissolve_Dependencies'.format( BLDDIR ) )
+    '{:}/Build/Makefile_Poissolve_Dependencies'.format( POISSOLVE_ROOT ) )
+    #'{:}/../../Build/Makefile_Poissolve_Dependencies'.format( BLDDIR ) )
 
 #deps_f902 = makeDictionary( VPATH2, 'f90' )
 #
