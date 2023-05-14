@@ -1,4 +1,0 @@
-$(OBJDIR)/%.o: $(SRCDIR)/%.f90
-	@echo
-	@echo "COMPILING SOURCE $< INTO OBJECT $@"
-	$(FC) $(FFLAGS) -o $@ -c $<
