@@ -18,5 +18,7 @@ POISSOLVE_OBJ_ABS := $(addprefix $(OBJDIR)/,$(POISSOLVE_OBJ))
 .SUFFIXES:
 #.f90.o:
 $(OBJDIR)/%.o: %.f90
+	@echo
+	@echo "COMPILING SOURCE $< INTO OBJECT $<"
 	$(FC) $(FFLAGS) -c $< -o $@
 include $(OBJDIR)/Makefile_Poissolve_Dependencies

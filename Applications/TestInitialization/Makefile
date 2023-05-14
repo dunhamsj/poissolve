@@ -14,9 +14,14 @@ all: $(TARGET)
 $(TARGET): \
 	$(POISSOLV_OBJ_ABS) \
 	$(OBJDIR)/$(TARGET).o
+	@echo
+	@echo "LINKING $@"
 	$(FC) $(FFLAGS) -o $@.ex \
 	$(POISSOLVE_OBJ_ABS) \
 	$(OBJDIR)/$(TARGET).o
+	@echo
+	@echo "Executable $(TARGET).ex created successfully!"
+	@echo
 
 clean:
 	rm -f *ex
