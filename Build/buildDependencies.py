@@ -32,10 +32,7 @@ def getDeps_fortran( file ):
             if( line_split_nospaces[0] == 'module' ): continue
 
             if line_split_nospaces[1][-1] == ',':
-                if line_split_nospaces[1][-1] == '\n':
-                    deps.append( line_split_nospaces[1][:-2] )
-                else:
-                    deps.append( line_split_nospaces[1][:-1] )
+                deps.append( line_split_nospaces[1][:-1] )
             else:
                 if line_split_nospaces[1][-1] == '\n':
                     deps.append( line_split_nospaces[1][:-1]   )
@@ -52,14 +49,14 @@ def getDeps( VPATH, suffix ):
 
         vpath = VPATH[iPath]
 
-        files = os.listdir( vpath )
+        dirFiles = os.listdir( vpath )
 
-        for iFile in range( len( files ) ):
+        for iFile in range( len( dirFiles ) ):
 
-            if ( files[iFile][-len(suffix):] == suffix ):
+            if ( dirFiles[iFile][-len(suffix):] == suffix ):
 
-                deps[files[iFile]] \
-                  = getDeps_fortran( vpath + '/' + files[iFile] )
+                deps[dirFiles[iFile]] \
+                  = getDeps_fortran( vpath + '/' + dirFiles[iFile] )
 
     return deps
 
@@ -166,12 +163,18 @@ def WriteMakefile_Dependencies( deps, objDir ):
 
 POISSOLVE_ROOT = os.getenv( 'POISSOLVE_ROOT' )
 
-VPATH  = os.getenv( 'VPATH' ).split( ' ' )
-VPATH2 = os.getenv( 'VPATH2' ).split( ' ' )
-BLDDIR     = os.getenv( 'BLDDIR' )
-#VPATH = [ '/home/kkadoogan/Work/Codes/poissolve/Modules/Initialization', \
-#          '/home/kkadoogan/Work/Codes/poissolve/Modules/Library', \
-#          '/home/kkadoogan/Work/Codes/poissolve/Applications/TestInitialization' ]
+#VPATH2 = os.getenv( 'VPATH2' ).split( ' ' )
+
+#VPATH  = os.getenv( 'VPATH' ).split( ' ' )
+#BLDDIR = os.getenv( 'BLDDIR' )
+
+VPATH  = [ POISSOLVE_ROOT + '/Modules/Library', \
+           POISSOLVE_ROOT + '/Modules/Initialization' ]
+BLDDIR = POISSOLVE_ROOT + '/Applications/TestInitialization/tmp_build_dir'
+os.system( 'rm -rf {:}'.format( BLDDIR ) )
+os.system( 'mkdir {:}'.format( BLDDIR ) )
+os.system( 'mkdir {:}/obj'.format( BLDDIR ) )
+os.system( 'mkdir {:}/src'.format( BLDDIR ) )
 
 nwd = BLDDIR + '/src'
 
