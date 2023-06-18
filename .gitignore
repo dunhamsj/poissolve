@@ -1,4 +1,5 @@
 *.DS_Store
 *.ex
 *tmp_build_dir/
+*.dat
 
