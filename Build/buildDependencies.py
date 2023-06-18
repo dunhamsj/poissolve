@@ -9,7 +9,7 @@ import os
 def getDeps_fortran( file ):
 
     """
-    Get dependencies for fortran file `file`
+    Get dependencies for fortran source code file `file`
     """
 
     deps = []
@@ -28,8 +28,9 @@ def getDeps_fortran( file ):
 
             if len( line_split_nospaces ) <= 1: continue
 
-            if( line_split_nospaces[0] == 'MODULE' ): continue
-            if( line_split_nospaces[0] == 'module' ): continue
+            if line_split_nospaces[0][0] == '!': continue
+
+            if( not ( 'USE' or 'use' ) in line_split_nospaces[0] ): continue
 
             if line_split_nospaces[1][-1] == ',':
                 deps.append( line_split_nospaces[1][:-1] )
@@ -60,6 +61,25 @@ def getDeps( VPATH, suffix ):
 
     return deps
 
+def PermuteIndices( srcs, objs, suffix ):
+
+    ind = [ i for i in range( len( srcs ) ) ]
+
+    for iSrc in range( len( srcs ) ):
+       for jSrc in range( len( srcs ) ):
+
+            if jSrc <= iSrc: continue
+
+            ModFile_iSrc = srcs[iSrc][:-(len(suffix)+1)]
+            ModFile_jSrc = srcs[jSrc][:-(len(suffix)+1)]
+
+            if not ModFile_jSrc in objs[iSrc]:
+                continue
+            else:
+                ind[jSrc], ind[iSrc] = ind[iSrc], ind[jSrc]
+
+    return ind
+
 def makeDictionary( VPATH, suffix ):
 
     deps = getDeps( VPATH, suffix )
@@ -69,31 +89,23 @@ def makeDictionary( VPATH, suffix ):
 
     # Sort dictionary by dependencies: least dependencies first
 
-    ind = [ i for i in range( len( srcs ) ) ]
+    ind = PermuteIndices( srcs, objs, suffix )
 
-    for iSrc in range( len( srcs ) ):
+    deps_new = {}
 
-        for jSrc in range( len( srcs ) ):
+    for iSrc in range( len( ind ) ):
 
-            if iSrc == jSrc: continue
+        deps_new[srcs[ind[iSrc]]] = objs[ind[iSrc]]
 
-            for iObj in range( len( objs[iSrc] ) ):
-
-                if( objs[iSrc][iObj][:-2] == srcs[jSrc][:-(len(suffix)+1)] ):
-
-                    a, b = ind.index(iSrc), ind.index(jSrc)
-
-                    ind[b], ind[a] = ind[a], ind[b]
-
-                    break
-
-    ind = [ i for i in ind[::-1] ]
+    deps = deps_new
+    srcs = list( deps.keys  () )
+    objs = list( deps.values() )
 
     deps_new = {}
 
     for iSrc in range( len( srcs ) ):
 
-        deps_new[srcs[ind[iSrc]]] = objs[ind[iSrc]]
+        deps_new[srcs[iSrc]] = objs[iSrc]
 
     return deps_new
 
@@ -165,12 +177,13 @@ POISSOLVE_ROOT = os.getenv( 'POISSOLVE_ROOT' )
 
 #VPATH2 = os.getenv( 'VPATH2' ).split( ' ' )
 
-#VPATH  = os.getenv( 'VPATH' ).split( ' ' )
-#BLDDIR = os.getenv( 'BLDDIR' )
+VPATH  = os.getenv( 'VPATH' ).split( ' ' )
+BLDDIR = os.getenv( 'BLDDIR' )
 
-VPATH  = [ POISSOLVE_ROOT + '/Modules/Library', \
-           POISSOLVE_ROOT + '/Modules/Initialization' ]
-BLDDIR = POISSOLVE_ROOT + '/Applications/TestInitialization/tmp_build_dir'
+#VPATH  = [ POISSOLVE_ROOT + '/Modules/Library', \
+#           POISSOLVE_ROOT + '/Modules/Initialization' ]
+#BLDDIR = POISSOLVE_ROOT + '/Applications/TestInitialization/tmp_build_dir'
+
 os.system( 'rm -rf {:}'.format( BLDDIR ) )
 os.system( 'mkdir {:}'.format( BLDDIR ) )
 os.system( 'mkdir {:}/obj'.format( BLDDIR ) )
@@ -181,6 +194,7 @@ nwd = BLDDIR + '/src'
 deps_f90 = makeDictionary( VPATH, 'f90' )
 
 copyFiles( deps_f90, VPATH, nwd, 'f90' )
+
 WriteMakefile_ObjectFiles \
   ( deps_f90, '{:}/obj/'.format( BLDDIR) )
 WriteMakefile_Dependencies \

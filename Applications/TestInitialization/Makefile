@@ -29,5 +29,7 @@ clean:
 
 $(OBJDIR)/TestInitialization.o: \
   $(OBJDIR)/KindModule.o \
+  $(OBJDIR)/MemoryProfilingModule.o \
   $(OBJDIR)/InitializationModule.o \
+  $(OBJDIR)/InterpolationModule.o \
   TestInitialization.f90
