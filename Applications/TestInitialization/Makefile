@@ -32,4 +32,6 @@ $(OBJDIR)/TestInitialization.o: \
   $(OBJDIR)/MemoryProfilingModule.o \
   $(OBJDIR)/InitializationModule.o \
   $(OBJDIR)/InterpolationModule.o \
+  $(OBJDIR)/UtilitiesModule.o \
+  $(OBJDIR)/PolynomialBasisModule.o \
   TestInitialization.f90

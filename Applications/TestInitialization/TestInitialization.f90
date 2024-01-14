@@ -10,16 +10,19 @@ PROGRAM TestInitialization
 
   IMPLICIT NONE
 
-  INTEGER, PARAMETER :: nNodesX(3) = [ 132, 119, 12 ]
+  INTEGER, PARAMETER :: nX(3)      = [ 10, 1, 1 ]
+  INTEGER, PARAMETER :: nNodesX(3) = [ 3, 1, 1 ]
 
-  LOGICAL , ALLOCATABLE :: IsD(:,:,:)
-  LOGICAL , ALLOCATABLE :: IsN(:,:,:)
+  REAL(DP), ALLOCATABLE :: X1_C(:)
+  REAL(DP), ALLOCATABLE :: X2_C(:)
+  REAL(DP), ALLOCATABLE :: X3_C(:)
+  REAL(DP), ALLOCATABLE :: dX1 (:)
+  REAL(DP), ALLOCATABLE :: dX2 (:)
+  REAL(DP), ALLOCATABLE :: dX3 (:)
 
-  REAL(DP), ALLOCATABLE :: xI(:,:,:)
-  REAL(DP), ALLOCATABLE :: xO(:,:,:)
-  REAL(DP), ALLOCATABLE :: bD(:,:,:)
-  REAL(DP), ALLOCATABLE :: bN(:,:,:)
-  REAL(DP), ALLOCATABLE :: f (:,:,:)
+  REAL(DP), ALLOCATABLE :: f(:,:,:,:)
+
+  INTEGER :: nDOFX
 
   INTEGER        :: ounit = 100
   CHARACTER(128) :: Label, FileName
@@ -27,16 +30,16 @@ PROGRAM TestInitialization
   REAL(DP)       :: Time = 4.60_DP
   LOGICAL, PARAMETER :: WriteMemory = .TRUE.
 
-  ALLOCATE( IsD(nNodesX(1),nNodesX(2),nNodesX(3)) )
-  ALLOCATE( IsN(nNodesX(1),nNodesX(2),nNodesX(3)) )
+  ALLOCATE( X1_C(nX(1)) )
+  ALLOCATE( X2_C(nX(2)) )
+  ALLOCATE( X3_C(nX(3)) )
+  ALLOCATE( dX1 (nX(1)) )
+  ALLOCATE( dX2 (nX(2)) )
+  ALLOCATE( dX3 (nX(3)) )
 
-  ALLOCATE( xI (nNodesX(1),nNodesX(2),nNodesX(3)) )
-  ALLOCATE( xO (nNodesX(1),nNodesX(2),nNodesX(3)) )
+  nDOFX = PRODUCT( nNodesX )
 
-  ALLOCATE( bD (nNodesX(1),nNodesX(2),nNodesX(3)) )
-  ALLOCATE( bN (nNodesX(1),nNodesX(2),nNodesX(3)) )
-
-  ALLOCATE( f  (nNodesX(1),nNodesX(2),nNodesX(3)) )
+  ALLOCATE( f(nDOFX,nX(1),nX(2),nX(3)) )
 
   FileName = 'memUsage.dat'
 
@@ -51,7 +54,7 @@ PROGRAM TestInitialization
            FileName_Option = TRIM( FileName ) )
 
   CALL InitializePoissolve &
-         ( IsD, IsN, xI, xO, bD, bN, f, InterpolationScheme = 'LINEAR' )
+         ( X1_C, X2_C, X3_C, dX1, dX2, dX3, f )
 
   Label = 'AFTER INITIALIZE'
   CALL WriteMemoryUsage &
@@ -59,13 +62,13 @@ PROGRAM TestInitialization
            WriteMemory_Option = WriteMemory, &
            FileName_Option = TRIM( FileName ) )
 
-  DEALLOCATE( f   )
-  DEALLOCATE( bN  )
-  DEALLOCATE( bD  )
-  DEALLOCATE( xO  )
-  DEALLOCATE( xI  )
-  DEALLOCATE( IsN )
-  DEALLOCATE( IsD )
+  DEALLOCATE( f    )
+  DEALLOCATE( dX3  )
+  DEALLOCATE( dX2  )
+  DEALLOCATE( dX1  )
+  DEALLOCATE( X3_C )
+  DEALLOCATE( X2_C )
+  DEALLOCATE( X1_C )
 
   Label = 'BEFORE FINALIZE'
   CALL WriteMemoryUsage &
